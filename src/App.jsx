@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import { EVENTS } from "./consts";
 
-const NAVIGATION_EVENT = 'pushstate'
 
 function navigate(href){
   window.history.pushState({},'', href)
-  const navigationEvent = new Event(NAVIGATION_EVENT)
+  const navigationEvent = new Event(EVENTS.PUSHSTATE)
   window.dispatchEvent(navigationEvent)
 }
 
@@ -44,10 +44,12 @@ function App() {
     const onLocationsChange = () => {
       setCurrentPath(window.location.pathname)
     }
-    window.addEventListener(NAVIGATION_EVENT, onLocationsChange)
+    window.addEventListener(EVENTS.PUSHSTATE, onLocationsChange)
+    window.addEventListener(EVENTS.POPSTATE, onLocationsChange)
 
     return () => {
-      window.removeEventListener(NAVIGATION_EVENT, onLocationsChange)
+      window.removeEventListener(EVENTS.PUSHSTATE, onLocationsChange)
+      window.removeEventListener(EVENTS.POPSTATE, onLocationsChange)
     }
   }, [])
 
