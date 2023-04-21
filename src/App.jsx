@@ -1,67 +1,30 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { EVENTS } from "./consts";
-
-
-function navigate(href){
-  window.history.pushState({},'', href)
-  const navigationEvent = new Event(EVENTS.PUSHSTATE)
-  window.dispatchEvent(navigationEvent)
-}
-
-
-function HomePage() {
-  return (
-    <>
-      <p>Esta es la home</p>
-      <button onClick={()=> {navigate('/about')}}  href="/about">Ir a Sobre nosotros</button>
-    </>
-  );
-}
-function AboutPage() {
-  return (
-    <>
-      <h1>About</h1>
-      <div>
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQr0jRJltN8qi1jMe88-hixKfjTBO8ljGdNo7TUKYzI1Us4oWaIwxMo5t1-Kd4RfhXxZ8&usqp=CAU"
-          alt="dayan arango"
-        />
-        <p>¡Hola soy dayan! y estas en mi clon de react router</p>
-        <button onClick={()=> {navigate('/')}} href="/">Home</button>
-      </div>
-    </>
-  );
-}
+import HomePage from "./pages/Home.jsx";
+import AboutPage from "./pages/About.jsx";
 
 
 function App() {
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
-  const [currentPath, setCurrentPath] = useState(window.location.pathname)
-
-  useEffect(()=>{
-
+  useEffect(() => {
     const onLocationsChange = () => {
-      setCurrentPath(window.location.pathname)
-    }
-    window.addEventListener(EVENTS.PUSHSTATE, onLocationsChange)
-    window.addEventListener(EVENTS.POPSTATE, onLocationsChange)
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener(EVENTS.PUSHSTATE, onLocationsChange);
+    window.addEventListener(EVENTS.POPSTATE, onLocationsChange);
 
     return () => {
-      window.removeEventListener(EVENTS.PUSHSTATE, onLocationsChange)
-      window.removeEventListener(EVENTS.POPSTATE, onLocationsChange)
-    }
-  }, [])
-
+      window.removeEventListener(EVENTS.PUSHSTATE, onLocationsChange);
+      window.removeEventListener(EVENTS.POPSTATE, onLocationsChange);
+    };
+  }, []);
 
   return (
     <main>
-    {
-      currentPath === '/' && <HomePage />
-    }
-    {
-      currentPath === '/about' && <AboutPage />
-    }
+      {currentPath === "/" && <HomePage />}
+      {currentPath === "/about" && <AboutPage />}
     </main>
   );
 }
